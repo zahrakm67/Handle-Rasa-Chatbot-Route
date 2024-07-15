@@ -70,7 +70,7 @@ rules:
   condition:
   - active_loop: polito_form
   - slot_was_set:
-    - admitted: Yet
+    - admitted: Yes
   steps:
   - action: utter_open_ticket
   - action: action_deactivate_form  

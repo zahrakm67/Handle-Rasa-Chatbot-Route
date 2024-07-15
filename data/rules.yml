@@ -1,0 +1,113 @@
+version: "2.0"
+
+rules:
+
+- rule: handle faq
+  steps:
+  - intent: faq
+  - action: utter_faq
+
+- rule: handle goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+#---------------------------------------------- Active Form
+
+- rule: Activate form
+  steps:
+  - intent: greet 
+  - action: polito_form
+  - active_loop: polito_form
+
+#---------------------------------------------- Unhappy Path when Form is active
+- rule: Example of an unhappy path
+  condition:
+  - active_loop: polito_form
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+  - action: polito_form
+  - active_loop: polito_form
+
+#---------------------------------------------- Deactive Form
+# - rule: Submit Polito form
+#   condition:
+#   - active_loop: polito_form
+#   steps:
+#   - action: polito_form
+#   - active_loop: null
+#   - slot_was_set:
+#     - requested_slot: null
+#   - action: utter_submit
+#   - action: utter_polito_slots
+
+#---------------------------------------------- Handle Language Selection non Italian Master
+# - rule: Submit Polito form Language Selection for non Italian Master
+#   condition:
+#   - active_loop: polito_form
+#   - slot_was_set:
+#     - admitted: Not Yet
+#   steps:
+#   - action: polito_form
+#   - active_loop: null
+#   - slot_was_set:
+#     - requested_slot: null    
+#   - action: utter_submit
+#   - action: utter_polito_slots
+#--------------------------------------------- restart the chat
+- rule: User restarts the chat
+  steps:
+    - intent: restart_chat
+    - action: action_restart_and_reset_slots
+    - action: utter_restart_message
+    - action: polito_form
+    - active_loop: polito_form
+
+
+#---------------------------------------------- Handle Selection Admitted Yes
+- rule: User interacts with form and admits
+  condition:
+  - active_loop: polito_form
+  - slot_was_set:
+    - admitted: Yet
+  steps:
+  - action: utter_open_ticket
+  - action: action_deactivate_form  
+  - intent: goodbye
+  - action: utter_goodbye
+
+
+#---------------------------------------------- Handle Language Selection Italian-Master
+- rule: Submit Polito form Language Selection is Italian for Master
+  condition:
+  - active_loop: polito_form
+  - slot_was_set:
+    - admitted: Not Yet
+    - degree: Master
+    - language: Italian
+  steps:
+  - action: polito_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_open_ticket
+
+
+# #---------------------------------------------- Handle Language Selection Bchelor
+- rule: Submit Polito form Language Selection for Bachelor
+  condition:
+  - active_loop: polito_form
+  - slot_was_set:
+    - admitted: Not Yet
+    - degree: Bachelor
+  steps:
+  - action: polito_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null    
+  - action: utter_submit
+  - action: utter_polito_slots
+
+# https://rasa.com/docs/rasa/unexpected-input/#summary  
+# https://rasa.com/docs/rasa/contextual-conversations/

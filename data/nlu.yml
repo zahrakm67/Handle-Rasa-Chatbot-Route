@@ -1,0 +1,68 @@
+version: "3.1"
+nlu:
+  #----------------------------------- Greeting
+ - intent: greet
+   examples: |
+     - hey
+     - hello
+     - hi
+     - hello there
+     - good morning
+     - good evening
+     - moin
+     - hey there
+     - let's go
+     - hey dude
+     - goodmorning
+     - goodevening
+     - good afternoon  
+     - Ciao
+  #----------------------------------- Goodbye
+ - intent: goodbye
+   examples: |
+     - cu
+     - good by
+     - cee you later
+     - good night
+     - bye
+     - goodbye
+     - have a nice day
+     - see you around
+     - bye bye
+     - see you later 
+  #---------------------------------- Restart the chat
+     
+ - intent: restart_chat
+   examples: |
+     - restart
+     - start over
+     - reset
+     - restart chat
+     - I want to start chat again
+     - how can start chat again
+     - I did mistake please reset chat again
+     - I have answered wrongly
+  
+#--------------==NEW
+
+ - intent: admitted_in_polito
+   examples: |
+     - [Yes](admitted)
+     - [Not Yet](admitted)
+
+
+#-------------------
+ - intent: select_degree
+   examples: |
+     - [Bachelor](degree)
+     - [Master](degree)
+
+ - intent: faq/info
+   examples: |
+     - Can you tell me about [Bachelor](degree) programs?
+     - What are the [Master](degree) courses catalog?
+
+ - intent: faq/deadlines
+   examples: |
+     - What is deadline of applying for [Bachelor](degree) programs?
+     - What is deadline of applying for [Master](degree) programs?

@@ -1,0 +1,37 @@
+version: "3.1"
+
+stories:
+
+- story: User interacts with form and admits
+  steps:
+  - intent: greet
+  - action: polito_form
+  - active_loop: polito_form
+  - intent: admitted_in_polito
+    entities:
+      - admitted: Yes
+  - action: utter_open_ticket
+  - action: action_deactivate_form
+  - active_loop: null
+  - intent: goodbye
+  - action: utter_goodbye
+
+
+- story: User interacts with form and not admitted Bachelor
+  steps:
+  - intent: greet
+  - action: polito_form
+  - active_loop: polito_form
+  - intent: admitted_in_polito
+    entities:
+      - admitted: Not Yet
+  - action: utter_ask_degree
+  - intent: select_degree
+    entities:
+      - degree: Bachelor
+  - action: utter_ask_language
+  - intent: select_language
+    entities:
+      - language: Italian
+  - action: utter_polito_slots
+

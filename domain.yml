@@ -1,0 +1,160 @@
+version: '3.1'
+  #----------------------------------- Intents
+intents:
+ - goodbye
+ - greet
+ - select_degree
+ - admitted_in_polito
+ - select_language
+ - restart_chat
+ - bot_challenge
+ - faq
+  #----------------------------------- Entities
+entities:
+  - degree
+  - admitted
+  - language
+
+  #----------------------------------- Slots
+slots:
+  degree:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: degree
+  #----------------------
+  admitted:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: admitted
+  #----------------------
+  language:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: language
+
+
+  #----------------------------------- Actions
+actions:
+ - utter_greet
+ - utter_goodbye 
+ - utter_faq
+ - utter_submit
+ - utter_polito_slots
+ - validate_polito_form
+ - action_restart_and_reset_slots
+ - action_deactivate_form
+  
+
+  #---------------------------------- Form
+forms:
+  polito_form:
+    required_slots:
+        - admitted
+        - degree
+        - language
+  
+  #----------------------------------- Responses
+responses:
+  utter_greet:
+  - text: "Hello! I’m here to help you!"
+
+  utter_submit:
+  - text: Ask me your question, How can I help you? .
+
+  utter_iamabot:
+  - text: I am a bot provided by Rasa!
+
+  utter_polito_slots:
+  - text: I will remember that your status about admitted is "{admitted}" and your degree is {degree}, your previous degree is in {language}"
+
+
+  utter_restart_message:
+    - text: "Restarting the chat..."
+ #----------------------------------- Choosing admitting
+  utter_ask_admitted:
+  - text: "Have you been admitted already in Politecnico di Torino?"
+    buttons:
+      - title: "Yes"
+        payload: '/admitted_in_polito{{"admitted": "Yes"}}'
+      - title: "Not Yet"
+        payload: '/admitted_in_polito{{"admitted": "Not Yet"}}'
+
+
+ #--------------------------------------- Choosing Degree
+  utter_ask_degree:
+  - condition:  
+      - type: slot
+        name: admitted
+        value: Yes
+    text: "Please send a ticket to Student Career Unit for any update personal data and questions!"
+  - condition:  
+      - type: slot
+        name: admitted
+        value: Not Yet
+    text: "Please select the degree program which you are interested in getting information about it:"
+    buttons:
+      - title: "Bachelor"
+        payload: '/select_degree{{"degree": "Bachelor"}}'
+      - title: "Master"
+        payload: '/select_degree{{"degree": "Master"}}'
+
+
+ #--------------------------------------- Choosing language
+  utter_ask_language:
+  - text: "Is your previous degree (high school diploma or bachelor's degree) in :"
+    buttons:
+      - title: "Italian"
+        payload: '/select_language{{"language": "Italian"}}'
+      - title: "Non Italian"
+        payload: '/select_language{{"language": "Non Italian"}}'
+
+#--------------------------------------- General 
+  
+  utter_goodbye:
+  - text: Goodbye,Have a nice day!!
+
+  utter_ask_question:
+  - text: How can I help you?
+  
+  utter_open_ticket:
+  - text: Please send a ticket to Student Career Unit for any update personal data and questions!
+
+  utter_did_that_help:
+  - text: Did that help you?
+
+#------------------------------------- FAQs
+  utter_faq/deadlines:
+  - condition:  
+      - type: slot
+        name: degree
+        value: Bachelor
+    text: "Here are the deadlines for bachelor degree programs."
+  - condition:  
+      - type: slot
+        name: degree
+        value: Master
+    text: "Here are the deadlines for master degree programs."
+
+  utter_faq/info:
+  - condition:  
+      - type: slot
+        name: degree
+        value: Bachelor
+    text: "Here is the information for bachelor degree programs."
+  - condition:  
+      - type: slot
+        name: degree
+        value: Master
+    text: "Here is the information for Master degree programs."
+
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+

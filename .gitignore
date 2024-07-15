@@ -1,0 +1,4 @@
+code/fine_tune_models/*
+.rasa/cache
+models/*
+dataset/*

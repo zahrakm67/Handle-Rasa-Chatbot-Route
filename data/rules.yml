@@ -65,7 +65,7 @@ rules:
     - active_loop: polito_form
 
 
-#---------------------------------------------- Handle Selection Admitted Yes
+#-------------------DO NOT Touch it--------------------------- Handle Selection Admitted Yes
 - rule: User interacts with form and admits
   condition:
   - active_loop: polito_form
@@ -87,12 +87,33 @@ rules:
     - degree: Master
     - language: Italian
   steps:
+  - action: utter_open_ticket
+  - action: action_deactivate_form  
+  - intent: goodbye
+  - action: utter_goodbye
+
+  # - action: polito_form
+  # - active_loop: null
+  # - slot_was_set:
+  #   - requested_slot: null
+  # - action: utter_open_ticket
+
+
+# #---------------------------------------------- Handle Language Selection Non-Italian-Master
+- rule: Submit Polito form Language Selection Non Italian for Master
+  condition:
+  - active_loop: polito_form
+  - slot_was_set:
+    - admitted: Not Yet
+    - degree: Master
+    - language: Non Italian
+  steps:
   - action: polito_form
   - active_loop: null
   - slot_was_set:
-    - requested_slot: null
-  - action: utter_open_ticket
-
+    - requested_slot: null    
+  - action: utter_submit
+  - action: utter_polito_slots
 
 # #---------------------------------------------- Handle Language Selection Bchelor
 - rule: Submit Polito form Language Selection for Bachelor
